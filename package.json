@@ -1,0 +1,33 @@
+{
+  "name": "build-info-webpack-plugin",
+  "version": "1.0.0",
+  "description": "自动在打包产物中注入项目名、Git 分支、提交哈希、打包时间，浏览器控制台一键查看",
+  "main": "index.js",
+  "files": [
+    "index.js",
+    "README.md",
+    "LICENSE"
+  ],
+  "keywords": [
+    "webpack",
+    "plugin",
+    "build-info",
+    "git",
+    "banner",
+    "console",
+    "debug",
+    "version"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Dengnp/build-info-webpack-plugin"
+  },
+  "author": "Dengnp",
+  "license": "MIT",
+  "peerDependencies": {
+    "webpack": ">=4.0.0"
+  },
+  "engines": {
+    "node": ">=12.0.0"
+  }
+}
