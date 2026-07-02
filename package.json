@@ -1,15 +1,22 @@
 {
   "name": "build-info-webpack-plugin",
   "version": "1.0.0",
-  "description": "自动在打包产物中注入项目名、Git 分支、提交哈希、打包时间，浏览器控制台一键查看",
-  "main": "index.js",
+  "description": "自动在打包产物中注入项目名、Git 分支、提交哈希、打包时间，浏览器控制台一键查看 — 支持 Webpack & Vite",
+  "main": "plugin-webpack.js",
+  "exports": {
+    ".": "./plugin-webpack.js",
+    "./vite": "./plugin-vite.js"
+  },
   "files": [
     "index.js",
+    "plugin-webpack.js",
+    "plugin-vite.js",
     "README.md",
     "LICENSE"
   ],
   "keywords": [
     "webpack",
+    "vite",
     "plugin",
     "build-info",
     "git",
@@ -25,9 +32,14 @@
   "author": "Dengnp",
   "license": "MIT",
   "peerDependencies": {
-    "webpack": ">=4.0.0"
+    "webpack": ">=4.0.0",
+    "vite": ">=2.0.0"
+  },
+  "peerDependenciesMeta": {
+    "webpack": { "optional": true },
+    "vite": { "optional": true }
   },
   "engines": {
-    "node": ">=12.0.0"
+    "node": ">=14.0.0"
   }
 }
