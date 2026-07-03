@@ -1,5 +1,5 @@
 {
-  "name": "build-info-webpack-plugin",
+  "name": "git-build-banner-plugin",
   "version": "1.0.0",
   "description": "自动在打包产物中注入项目名、Git 分支、提交哈希、打包时间，浏览器控制台一键查看 — 支持 Webpack & Vite",
   "main": "plugin-webpack.js",
@@ -27,7 +27,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/Dengnp/build-info-webpack-plugin"
+    "url": "https://github.com/Dengnp/git-build-banner-plugin"
   },
   "author": "Dengnp",
   "license": "MIT",

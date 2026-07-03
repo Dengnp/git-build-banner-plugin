@@ -1,4 +1,4 @@
-# build-info-webpack-plugin
+# git-build-banner-plugin
 
 每次构建时自动采集 **项目名**、**Git 分支**、**Git 提交哈希**、**打包时间**，注入到产物中。浏览器打开页面后自动在控制台打印，同时挂载到 `window.__APP_INFO__`。
 
@@ -31,7 +31,7 @@
 ## 安装
 
 ```bash
-npm install build-info-webpack-plugin --save-dev
+npm install git-build-banner-plugin --save-dev
 ```
 
 ---
@@ -42,7 +42,7 @@ npm install build-info-webpack-plugin --save-dev
 
 ```js
 // webpack.config.js 或 vue.config.js
-const BuildInfoPlugin = require("build-info-webpack-plugin");
+const BuildInfoPlugin = require("git-build-banner-plugin");
 
 module.exports = {
   // Vue CLI 写在 configureWebpack.plugins 里
@@ -56,7 +56,7 @@ module.exports = {
 
 ```js
 // vite.config.js
-import buildInfoPlugin from "build-info-webpack-plugin/vite";
+import buildInfoPlugin from "git-build-banner-plugin/vite";
 
 export default {
   plugins: [buildInfoPlugin()],
