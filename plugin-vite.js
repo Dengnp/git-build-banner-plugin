@@ -3,7 +3,8 @@ const { collectInfo, printTerminal, generateBanner } = require("./index");
 /**
  * BuildInfoPlugin — Vite 版
  *
- * 通过 transformIndexHtml 钩子注入构建信息到 HTML 页面，
+ * 通过 transformIndexHtml 钩子往 HTML <head> 注入 <script>，
+ * 注册 __buildInfo() 命令，不污染 JS/CSS bundle。
  * 开发模式（vite dev）和生产模式（vite build）均生效。
  *
  * @param {Object} options  同 index.collectInfo 的配置
@@ -29,7 +30,7 @@ function buildInfoVitePlugin(options = {}) {
     name: "build-info",
 
     /**
-     * 在 HTML 中注入 <script> 标签
+     * 在 HTML <head> 中注入 <script> 标签
      * Vite dev 模式每次请求都会调用，build 模式只调用一次
      */
     transformIndexHtml(html) {

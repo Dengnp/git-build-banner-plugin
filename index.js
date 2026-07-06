@@ -79,26 +79,29 @@ function printTerminal(info) {
 }
 
 /**
- * 生成浏览器端注入代码（IIFE + 执行守卫，防止多 chunk/module 重复打印）
+ * 生成浏览器端注入代码
+ * 注册 __buildInfo() 命令供按需调用，不再自动打印到控制台
  */
 function generateBanner(info) {
+  var json = JSON.stringify(info);
   return [
     "(function(){",
-    "if(window.__APP_INFO_PRINTED__)return;",
-    "window.__APP_INFO_PRINTED__=true;",
-    "var i=" + JSON.stringify(info) + ";",
-    'var a="color:#3b82f6;font-size:14px;font-weight:bold;";',
-    'var b="color:#22c55e;font-size:12px;";',
-    'var c="color:#f59e0b;font-size:12px;";',
-    'var d="color:#8b5cf6;font-size:12px;";',
-    "console.log(",
-    '  "%c🏷 项目: %c"+i.projectName+',
-    '  "  %c🌿 分支: %c"+i.gitBranch+',
-    '  "  %c📝 提交: %c"+i.gitCommit+',
-    '  "  %c🕐 打包: %c"+i.buildTime,',
-    "  a,b,a,c,a,d,a,b",
-    ");",
+    "var i=" + json + ";",
     "window.__APP_INFO__=i;",
+    "window.__buildInfo=function(){",
+    '  var a="color:#3b82f6;font-size:14px;font-weight:bold;";',
+    '  var b="color:#22c55e;font-size:12px;";',
+    '  var c="color:#f59e0b;font-size:12px;";',
+    '  var d="color:#8b5cf6;font-size:12px;";',
+    "  console.log(",
+    '    "%c🏷 项目: %c"+i.projectName+',
+    '    "  %c🌿 分支: %c"+i.gitBranch+',
+    '    "  %c📝 提交: %c"+i.gitCommit+',
+    '    "  %c🕐 打包: %c"+i.buildTime,',
+    "    a,b,a,c,a,d,a,b",
+    "  );",
+    "};",
+    'console.log("%c💡 输入 __buildInfo() 查看打包信息","color:#6b7280;font-style:italic;");',
     "})();",
   ].join("\n");
 }
