@@ -38,14 +38,96 @@ function _getProjectName() {
 }
 
 function _getGitBranch() {
+  // 1. 优先使用 CI 环境变量（Jenkins 等 detached HEAD 场景）
+  const ciBranch = _getCIBranch();
+  if (ciBranch) return ciBranch;
+
+  // 2. git rev-parse（正常分支场景）
   try {
-    return execSync("git rev-parse --abbrev-ref HEAD", {
+    const branch = execSync("git rev-parse --abbrev-ref HEAD", {
       encoding: "utf-8",
       stdio: ["pipe", "pipe", "ignore"],
     }).trim();
-  } catch (_) {
-    return "unknown";
+    if (branch && branch !== "HEAD") return branch;
+  } catch (_) {}
+
+  // 3. detached HEAD 兜底：查找包含当前 HEAD 的远程分支
+  try {
+    const refs = execSync("git branch -r --contains HEAD", {
+      encoding: "utf-8",
+      stdio: ["pipe", "pipe", "ignore"],
+    }).trim();
+    if (refs) {
+      const match = refs.match(/origin\/(\S+)/);
+      if (match) return match[1];
+    }
+  } catch (_) {}
+
+  // 4. 通过 git log 引用名兜底
+  try {
+    const refs = execSync("git log -1 --pretty=%D", {
+      encoding: "utf-8",
+      stdio: ["pipe", "pipe", "ignore"],
+    }).trim();
+    if (refs) {
+      const match = refs.match(/origin\/(\S+)/);
+      if (match) return match[1];
+    }
+  } catch (_) {}
+
+  return "unknown";
+}
+
+/**
+ * 从 CI 环境变量中获取当前分支名
+ */
+function _getCIBranch() {
+  // Jenkins
+  if (process.env.GIT_BRANCH) {
+    return process.env.GIT_BRANCH.replace(/^origin\//, "");
   }
+  if (process.env.BRANCH_NAME) {
+    return process.env.BRANCH_NAME;
+  }
+  // GitHub Actions
+  if (process.env.GITHUB_REF_NAME) {
+    return process.env.GITHUB_REF_NAME;
+  }
+  if (process.env.GITHUB_HEAD_REF) {
+    return process.env.GITHUB_HEAD_REF;
+  }
+  // GitLab CI
+  if (process.env.CI_COMMIT_BRANCH) {
+    return process.env.CI_COMMIT_BRANCH;
+  }
+  if (process.env.CI_COMMIT_REF_NAME) {
+    return process.env.CI_COMMIT_REF_NAME;
+  }
+  // Bitbucket Pipeline
+  if (process.env.BITBUCKET_BRANCH) {
+    return process.env.BITBUCKET_BRANCH;
+  }
+  // Azure DevOps
+  if (process.env.BUILD_SOURCEBRANCHNAME) {
+    return process.env.BUILD_SOURCEBRANCHNAME;
+  }
+  // Drone CI
+  if (process.env.DRONE_BRANCH) {
+    return process.env.DRONE_BRANCH;
+  }
+  // Travis CI
+  if (process.env.TRAVIS_BRANCH) {
+    return process.env.TRAVIS_BRANCH;
+  }
+  // CircleCI
+  if (process.env.CIRCLE_BRANCH) {
+    return process.env.CIRCLE_BRANCH;
+  }
+  // Netlify
+  if (process.env.HEAD) {
+    return process.env.HEAD;
+  }
+  return null;
 }
 
 function _getGitCommit() {
