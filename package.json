@@ -1,16 +1,25 @@
 {
   "name": "git-build-banner-plugin",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "自动在打包产物中注入项目名、Git 分支、提交哈希、打包时间，浏览器控制台一键查看 — 支持 Webpack & Vite",
   "main": "plugin-webpack.js",
+  "types": "plugin-webpack.d.ts",
   "exports": {
-    ".": "./plugin-webpack.js",
-    "./vite": "./plugin-vite.js"
+    ".": {
+      "types": "./plugin-webpack.d.ts",
+      "default": "./plugin-webpack.js"
+    },
+    "./vite": {
+      "types": "./plugin-vite.d.ts",
+      "default": "./plugin-vite.js"
+    }
   },
   "files": [
     "index.js",
     "plugin-webpack.js",
+    "plugin-webpack.d.ts",
     "plugin-vite.js",
+    "plugin-vite.d.ts",
     "README.md",
     "LICENSE"
   ],
