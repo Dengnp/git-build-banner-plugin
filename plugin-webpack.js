@@ -40,10 +40,25 @@ class BuildInfoWebpackPlugin {
                 cb(null, data);
               }
             );
-            return; // 走 HWP 专用通道，不再走通用 asset 逻辑
+            return; // 走 HWP v5 专用通道，不再走通用 asset 逻辑
           }
         } catch (_) {
-          // html-webpack-plugin 未安装，走下面的通用 asset 逻辑
+          // html-webpack-plugin 未安装，走下面的兼容逻辑
+        }
+
+        // HtmlWebpackPlugin v3 / v4 兼容：通过 compilation.hooks 注入
+        if (
+          compilation.hooks &&
+          compilation.hooks.htmlWebpackPluginAfterHtmlProcessing
+        ) {
+          compilation.hooks.htmlWebpackPluginAfterHtmlProcessing.tapAsync(
+            "BuildInfoWebpackPlugin",
+            (data, cb) => {
+              data.html = _injectScript(data.html, scriptTag);
+              cb(null, data);
+            }
+          );
+          return; // 走 HWP v3/v4 通道，不再走通用 asset 逻辑
         }
 
         // 通用路径：没有 HtmlWebpackPlugin 时，直接修改 HTML asset
